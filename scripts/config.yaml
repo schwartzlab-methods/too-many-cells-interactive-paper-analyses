@@ -1,0 +1,25 @@
+# scRNA-seq datasets
+raw_data: "./data/raw"
+scrnaseq_data: "./data"
+full: "./results/01_full_tree"
+pruned: "./results/02_pruned_tree"
+diff: "./results/03_differential"
+gsea: "./results/04_gsea"
+onevsall_fc: "./results/05_onevsall_log2fc"
+onevsallres_gsea: "./results/06_onevsall_gsea"
+plots: "./results/07_plots"
+
+# 10X format matrices
+mtx_raw: "./data/mtx_raw"
+mtx_uq: "./data/mtx_upperquartile"
+mtx_tfidf: "./data/mtx_tfidf"
+
+# AnnData files
+adata: "./data/adata.h5ad"
+adata_uq: "./data/adata_uq.h5ad"
+adata_tfidf: "./data/adata_tfidf.h5ad"
+
+# Gene sets
+gmt_custom: "./src/gene_sets_custom"
+gmt_msigdb: "./src/gene_sets_msigdb"
+diapause: "./src/diapause_genes.csv"
