@@ -1,4 +1,4 @@
-# TooManyCells Interactive Paper Analysis
+# TooManyCellsInteractive Paper Analysis
 
 ### Scripts
 - _01_download_data.sh_: Download scRNA-seq read count data from GEO data.
