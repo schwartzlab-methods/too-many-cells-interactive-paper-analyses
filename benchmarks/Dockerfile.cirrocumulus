@@ -1,0 +1,10 @@
+# built locally
+FROM python:3.9
+
+RUN pip3 install scanpy cirrocumulus
+
+COPY ./mex-to-h5ad.py ./run-cirrocumulus.sh /code/
+
+WORKDIR /code
+
+CMD ["bash", "run-cirrocumulus.sh"]

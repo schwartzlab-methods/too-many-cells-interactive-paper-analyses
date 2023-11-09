@@ -1,0 +1,15 @@
+FROM python:3.8-slim
+
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
+RUN apt-get update && \
+    apt-get install -y build-essential libxml2-dev python3-dev python3-pip zlib1g-dev python3-requests python3-aiohttp && \
+    python3 -m pip install --upgrade pip && \
+    pip3 install anndata==0.7.6 scanpy numba==0.52.0 cellxgene[prepare]
+
+WORKDIR /code
+
+COPY ./mex-to-h5ad.py ./run-cellxgene.sh ./
+
+ENTRYPOINT ["bash", "run-cellxgene.sh"]

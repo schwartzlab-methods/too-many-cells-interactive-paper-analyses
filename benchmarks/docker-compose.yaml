@@ -1,0 +1,33 @@
+version: "3.7"
+services:
+  node:
+    container_name: tmci-node
+    image: ghcr.io/cklamann/too-many-cells-js:latest
+    init: true
+    build: ./
+    environment:
+      - PGUSER=postgres
+      - PGHOST=postgres
+      - PGDATABASE=tmc
+    networks:
+      - tmc-network
+    logging:
+      driver:
+        journald
+  postgres:
+    container_name: tmci-psql
+    image: postgres:14.5
+    environment:
+      - POSTGRES_DB=tmc
+      - POSTGRES_HOST_AUTH_METHOD=trust
+    volumes:
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - tmc-network
+
+volumes:
+  postgres-data:
+
+networks:
+  tmc-network:
