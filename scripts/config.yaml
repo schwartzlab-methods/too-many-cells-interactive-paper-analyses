@@ -13,6 +13,7 @@ plots: "./results/07_plots"
 mtx_raw: "./data/mtx_raw"
 mtx_uq: "./data/mtx_upperquartile"
 mtx_tfidf: "./data/mtx_tfidf"
+mtx_diapause: "./data/mtx_diapause"
 
 # AnnData files
 adata: "./data/adata.h5ad"

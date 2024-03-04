@@ -31,6 +31,27 @@ def main():
     adata.obs['toomanycells'] = tmc_clusters.astype(str)
     adata.write_h5ad(adata_path)
     
+    # Load and compare to TMCI output
+    tfidf = sc.read_10x_mtx(config['mtx_tfidf'])
+    diapause = sc.read_10x_mtx(config['mtx_diapause'])
+    cluster_path = os.path.join(config['pruned'], 'diapause/clusters.csv')
+    df = tfidf[:, ['ID2', 'MTOR']].to_df()
+    df['cluster'] = pd.read_csv(cluster_path, index_col='cell')['cluster']
+    df['diapause'] = diapause.to_df()['diapause_score']
+    df.groupby('cluster').mean().describe()
+    df.describe()
+    
+    # Load CELLxGENE prepared AnnData file
+    cg_path = os.path.join(config['scrnaseq_data'], 'cellxgene-prepared2.h5ad')
+    cgdata = sc.read_h5ad(cg_path)
+    cfdf = cgdata[:, ['ID2', 'MTOR']].to_df()
+    cfdf['cluster'] = pd.read_csv(cluster_path, index_col='cell')['cluster']
+    cfdf['diapause'] = diapause.to_df()['diapause_score']
+    cfdf.groupby('cluster').mean().describe()
+    cfdf.describe()
+    
+    cgp_path = os.path.join(config['scrnaseq_data'], 'cellxgene-prepared.h5ad')
+    cgpdata = sc.read_h5ad(cg_path)
     
 if __name__ == '__main__':
     sys.exit(main())
