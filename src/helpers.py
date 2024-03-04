@@ -5,15 +5,15 @@ import os
 import shutil
 from typing import Callable, Dict, Optional
 
-from scipy.stats.mstats import gmean
-from scipy.stats import mannwhitneyu, kruskal
-from statsmodels.stats.multitest import multipletests
 import anndata as ad
 import gseapy as gp
 import numpy as np
 import pandas as pd
 from scipy.io import mmwrite
 from scipy.sparse import csr_matrix
+from scipy.stats import kruskal, mannwhitneyu
+from scipy.stats.mstats import gmean
+from statsmodels.stats.multitest import multipletests
 
 
 # Helper functions
@@ -23,9 +23,9 @@ def _apply_by_row(func: Callable, input_mtx: csr_matrix, *args, **kwargs) -> ad.
     for cell in range(ncells):
         cellreads = input_mtx.getrow(cell)
         new_cellreads = func(cellreads.data, *args, **kwargs)
-        output_mtx.data[
-            output_mtx.indptr[cell] : output_mtx.indptr[cell + 1]
-        ] = new_cellreads
+        output_mtx.data[output_mtx.indptr[cell] : output_mtx.indptr[cell + 1]] = (
+            new_cellreads
+        )
     return output_mtx
 
 

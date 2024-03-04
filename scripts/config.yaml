@@ -24,3 +24,68 @@ adata_tfidf: "./data/adata_tfidf.h5ad"
 gmt_custom: "./src/gene_sets_custom"
 gmt_msigdb: "./src/gene_sets_msigdb"
 diapause: "./src/diapause_genes.csv"
+
+# Data paths
+results: ./results/
+
+# scRNA-seq metadata
+dnd41_whitelist: ./src/whitelist_dnd41.csv
+
+# scRNA-seq data files
+mex:
+  # Prostate cancer cell line LNCaP
+  lncap_control: # DMSO: GSM5155457
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155455/suppl/
+    barcodes: GSM5155455_LNCaP-DMSO_barcodes.tsv.gz
+    features: GSM5155455_LNCaP-DMSO_features.tsv.gz
+    matrix: GSM5155455_LNCaP-DMSO_matrix.mtx.gz
+  lncap_short: # Enzalutamide (anti-androgen): GSM5155457
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155457/suppl/
+    barcodes: GSM5155457_LNCaP-RESA_barcodes.tsv.gz
+    features: GSM5155457_LNCaP-RESA_features.tsv.gz
+    matrix: GSM5155457_LNCaP-RESA_matrix.mtx.gz
+  # T-ALL cell line DND-41
+  dnd41_control: # DMSO (control): GSM4121361
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121361/suppl/
+    barcodes: GSM4121361_DND41_DMSO_scRNA_barcodes.tsv.gz
+    features: GSM4121361_DND41_DMSO_scRNA_genes.tsv.gz
+    matrix: GSM4121361_DND41_DMSO_scRNA_matrix.mtx.gz
+  dnd41_long: # Gamma secretase inhibitor (GSI) sustained: GSM4121364
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121364/suppl/
+    barcodes: GSM4121364_DND41_GSI_Res_sustained_barcodes.tsv.gz
+    features: GSM4121364_DND41_GSI_Res_sustained_genes.tsv.gz
+    matrix: GSM4121364_DND41_GSI_Res_sustained_matrix.mtx.gz
+  dnd41_short: # GSI short: GSM4121364
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121362/suppl/
+    barcodes: GSM4121362_DND41_GSI_scRNA_barcodes.tsv.gz
+    features: GSM4121362_DND41_GSI_scRNA_genes.tsv.gz
+    matrix: GSM4121362_DND41_GSI_scRNA_matrix.mtx.gz
+  # Melanoma cell line SK-MEL-28
+  skmel28_control: # DMSO: GSM4932163
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932163/suppl/
+    barcodes: GSM4932163_sample5_barcodes.tsv.gz
+    features: GSM4932163_sample5_genes.tsv.gz
+    matrix: GSM4932163_sample5_matrix.mtx.gz
+  skmel28_short: # Dabrafenin-treated 72h: GSM4932166
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932166/suppl/
+    barcodes: GSM4932166_sample8_barcodes.tsv.gz
+    features: GSM4932166_sample8_genes.tsv.gz
+    matrix: GSM4932166_sample8_matrix.mtx.gz
+  # Breast cancer cell line MDA-MB-231
+  mdamb231_control: # DMSO: GSM4684556
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684556/suppl/
+    barcodes: GSM4684556_t0_barcodes.tsv.gz
+    features: GSM4684556_t0_features.tsv.gz
+    matrix: GSM4684556_t0_matrix.mtx.gz
+  mdamb231_long: # Doxorubicin treated 7-weeks: GSM4684557
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684557/suppl/
+    barcodes: GSM4684557_t7_barcodes.tsv.gz
+    features: GSM4684557_t7_features.tsv.gz
+    matrix: GSM4684557_t7_matrix.mtx.gz
+  # Lung cancer cell line PC9
+  pc9_control: # Untreated: GSM3972651
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3972nnn/GSM3972651/suppl/
+    tar: GSM3972651_PC9D0_filtered_feature_bc_matrices.tar.gz
+  pc9_short: # Erlotinib treated: GSM3972652
+    url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3972nnn/GSM3972652/suppl/
+    tar: GSM3972652_PC9D3Erl_filtered_feature_bc_matrices.tar.gz

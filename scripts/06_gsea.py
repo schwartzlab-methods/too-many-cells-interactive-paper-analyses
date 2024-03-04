@@ -5,22 +5,22 @@ Perform differential expression analysis and GSEA on single-cell RNA-seq data
 import os
 import sys
 
+import altair as alt
 import gseapy as gp
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scanpy as sc
 import yaml
-import matplotlib.pyplot as plt
-import altair as alt
 from altair_saver import save
 
 import src.altair_themes as altair_themes
-from src.helpers import preranked, rank_product, onevsrest 
+from src.helpers import onevsrest, preranked, rank_product
 
 alt.themes.register("publishTheme", altair_themes.publishTheme)
 alt.themes.enable("publishTheme")
 alt.data_transformers.disable_max_rows()
-plt.rcParams['svg.fonttype'] = 'none'
+plt.rcParams["svg.fonttype"] = "none"
 
 
 def main():
@@ -62,7 +62,7 @@ def main():
     rank_prod[rank_prod["pVal"] <= 0.05].to_csv(
         os.path.join(config["gsea"], "rankprod_long.csv"), index_label="Gene"
     )
-    
+
     # Using the log2FC values, run GSEA preranked on each control vs. treated
     # comparison within cell lines using Hallmark, C2, and C6 gene sets from
     # MSigDB
@@ -78,11 +78,11 @@ def main():
         geneset_path = os.path.join(config["gmt_custom"], geneset_file)
         geneset_df = pd.read_csv(geneset_path)
         geneset_name = geneset_file.split("_")[0]
-        plot_dict[f'{geneset_name}_up'] = list(geneset_df.gene[geneset_df.weight > 0])
-        plot_dict[f'{geneset_name}_down'] = list(geneset_df.gene[geneset_df.weight < 0])
-    plot_dict['G2M'] = geneset_dict['c2']['FISCHER_G2_M_CELL_CYCLE']
-    geneset_dict['custom'] = plot_dict
-            
+        plot_dict[f"{geneset_name}_up"] = list(geneset_df.gene[geneset_df.weight > 0])
+        plot_dict[f"{geneset_name}_down"] = list(geneset_df.gene[geneset_df.weight < 0])
+    plot_dict["G2M"] = geneset_dict["c2"]["FISCHER_G2_M_CELL_CYCLE"]
+    geneset_dict["custom"] = plot_dict
+
     # Run GSEA
     for cell_name, log2fc in log2fc_dict.items():
         gsea_dict = {}
@@ -98,7 +98,7 @@ def main():
                 for term in terms:
                     plotname = os.path.join(
                         config["gsea"],
-                        f'{cell_name}_{geneset_name}_{term}.svg',
+                        f"{cell_name}_{geneset_name}_{term}.svg",
                     )
                     gp.gseaplot(
                         rank_metric=res.ranking,
@@ -110,13 +110,10 @@ def main():
         gsea_path = os.path.join(config["gsea"], f"{cell_name}_gsea.csv")
         gsea_df.sort_values("NES", ascending=False).to_csv(gsea_path)
         # Create scatterplot of FDR vs. NES
-        plot_df = gsea_df[gsea_df.Geneset != 'custom']
+        plot_df = gsea_df[gsea_df.Geneset != "custom"]
         gsea_plot = (
             alt.Chart(plot_df)
-            .mark_line(
-                color="black",
-                point=alt.OverlayMarkDef(size=40, color='black')
-            )
+            .mark_line(color="black", point=alt.OverlayMarkDef(size=40, color="black"))
             .encode(
                 x=alt.X("NES:Q"),
                 y=alt.Y("FDR q-val:Q"),
@@ -124,19 +121,22 @@ def main():
             )
             .properties(width=100, height=100)
         )
-        g2m_plot = alt.Chart(plot_df).mark_circle(
-                color="red",
-                size=100
-            ).encode(
+        g2m_plot = (
+            alt.Chart(plot_df)
+            .mark_circle(color="red", size=100)
+            .encode(
                 x=alt.X("NES:Q"),
                 y=alt.Y("FDR q-val:Q"),
                 tooltip=["Term", "NES", "FDR q-val"],
-            ).properties(
-                width=100, height=100
-            ).transform_filter(
-                alt.FieldEqualPredicate(field='Term', equal='FISCHER_G2_M_CELL_CYCLE')
             )
-        final_plot = alt.layer(gsea_plot, g2m_plot, data=plot_df).facet(column='Geneset')
+            .properties(width=100, height=100)
+            .transform_filter(
+                alt.FieldEqualPredicate(field="Term", equal="FISCHER_G2_M_CELL_CYCLE")
+            )
+        )
+        final_plot = alt.layer(gsea_plot, g2m_plot, data=plot_df).facet(
+            column="Geneset"
+        )
         for img_format in ["png", "svg", "html"]:
             save(
                 final_plot,
@@ -145,14 +145,15 @@ def main():
 
     # Aggregate one vs. all results and export into annotation table format
     # for the TooManyCells Interactive tool
-    adata_uq = sc.read_10x_mtx(config['mtx_uq'])
-    adata_uq.layers['uqnorm'] = adata_uq.X
-    adata = sc.read_h5ad(config['adata'])
+    adata_uq = sc.read_10x_mtx(config["mtx_uq"])
+    adata_uq.layers["uqnorm"] = adata_uq.X
+    adata = sc.read_h5ad(config["adata"])
     adata_uq.obs = adata_uq.obs.join(adata.obs)
-    adata_uq.write_h5ad(config['adata_uq'])
+    adata_uq.write_h5ad(config["adata_uq"])
     # Perform one vs. rest differential expression analysis
     # TO-DO: Avoid writing out .csv to file
-    onevsall_fc = onevsrest( adata_uq,
+    onevsall_fc = onevsrest(
+        adata_uq,
         layer="uqnorm",
         cluster_path=os.path.join(config["pruned"], "clusters.csv"),
         save_dir=config["onevsall_fc"],

@@ -9,7 +9,7 @@ import scanpy as sc
 import yaml
 from scipy.sparse import csr_matrix
 
-from src.helpers import export_labels, signature_score, adata_to_10x
+from src.helpers import adata_to_10x, export_labels, signature_score
 
 
 def main():
