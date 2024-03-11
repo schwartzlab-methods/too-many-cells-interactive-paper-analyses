@@ -66,7 +66,7 @@ def main():
     )
     diapause_adata.X = csr_matrix(diapause_adata.X)
     adata_to_10x(
-        diapause_adata, sample_id="mtx_diapause", data_dir=config["scrnaseq_data"]
+        diapause_adata, obs_key="mtx_diapause", data_dir=config["scrnaseq_data"]
     )
 
     # Export treatment labels to use with TooManyCells differential expression
@@ -93,7 +93,7 @@ def main():
     del adata.obs["tx"]
 
     # Export AnnData object to file for use with TooManyCells
-    adata_to_10x(adata, sample_id="mtx_raw", data_dir=config["scrnaseq_data"])
+    adata_to_10x(adata, obs_key="mtx_raw", data_dir=config["scrnaseq_data"])
     adata.write_h5ad(config["adata"])
 
 

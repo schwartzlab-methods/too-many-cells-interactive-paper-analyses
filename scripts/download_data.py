@@ -14,7 +14,7 @@ import anndata as ad
 import pandas as pd
 import scanpy as sc
 
-from scripts.config import *
+from scripts.configs import *
 
 
 def download_mex_v3(barcodes, features, matrix):
@@ -107,5 +107,3 @@ adata.obs_names_make_unique()
 results_dir = os.path.join(config["results"], Path(__file__).stem)
 Path(results_dir).mkdir(parents=True, exist_ok=True)
 adata.write_h5ad(f"{results_dir}/raw.h5ad")
-
-# Write AnnData in 10X format for downstream use with TooManyCells

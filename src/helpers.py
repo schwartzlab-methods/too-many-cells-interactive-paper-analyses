@@ -3,6 +3,7 @@
 import gzip
 import os
 import shutil
+from pathlib import Path
 from typing import Callable, Dict, Optional
 
 import anndata as ad
@@ -190,24 +191,20 @@ def rank_product(foldchange: pd.DataFrame, n_permutations: int = 100):
 
 
 # Write functions
-def adata_to_10x(adata: ad.AnnData, sample_id: str, data_dir) -> None:
-    folder = os.path.join(data_dir, sample_id)
-    os.makedirs(folder, exist_ok=True)
+def adata_to_10x(adata, layer, data_dir):
+    Path(data_dir).mkdir(parents=True, exist_ok=True)
     # Transpose read counts to matrix market format, such that (rows, columns)
     # correspond to (features, cells)
-    target = os.path.join(folder, "matrix.mtx")
-    mmwrite(target, adata.X.T, symmetry="general")
-    with open(target, "rb") as mtx_in:
-        with gzip.open(f"{target}.gz", "wb") as mtx_gz:
-            shutil.copyfileobj(mtx_in, mtx_gz)
-    os.remove(target)
+    with os.path.join(data_dir, "matrix.mtx") as mtx_path:
+        mmwrite(mtx_path, adata.layers[layer].T, symmetry="general")
+        with open(mtx_path, "rb") as mtx_in:
+            with gzip.open(f"{mtx_path}.gz", "wb") as mtx_gz:
+                shutil.copyfileobj(mtx_in, mtx_gz)
     # Barcode observations
-    barcode_target = os.path.join(folder, "barcodes.tsv.gz")
-    with gzip.open(barcode_target, "wb") as barcodes_gz:
-        for barcode in adata.obs_names.values:
-            barcodes_gz.write("{}\n".format(barcode).encode())
+    barcodes_path = os.path.join(data_dir, "barcodes.tsv.gz")
+    adata.obs.index.to_csv(barcodes_path, sep="\t", header=False)
     # Gene features
-    feature_target = os.path.join(folder, "features.tsv.gz")
+    features_path = os.path.join(data_dir, "features.tsv.gz")
     var_df = pd.DataFrame(
         {
             "gene_id": adata.var.reset_index()["index"],
@@ -215,10 +212,13 @@ def adata_to_10x(adata: ad.AnnData, sample_id: str, data_dir) -> None:
             "type": "Gene Expression",
         }
     )
-    var_df.to_csv(feature_target, sep="\t", header=False, index=False)
+    var_df.to_csv(features_path, sep="\t", header=False, index=False)
+
+
+def write_adata_label(adata, obs_key, data_dir):
     # Write labels file for TooManyCells
-    labels_target = os.path.join(folder, "labels.csv")
+    labels_target = os.path.join(data_dir, f"labels_{obs_key}.csv")
     adata_obs = pd.DataFrame(adata.obs.reset_index())
-    labels_df = adata_obs[["index", "sample"]]
+    labels_df = adata_obs[["index", obs_key]]
     labels_df.columns = ["item", "label"]
     labels_df.to_csv(labels_target, header=True, index=False)

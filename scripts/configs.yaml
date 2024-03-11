@@ -24,6 +24,8 @@ adata_tfidf: "./data/adata_tfidf.h5ad"
 gmt_custom: "./src/gene_sets_custom"
 gmt_msigdb: "./src/gene_sets_msigdb"
 diapause: "./src/diapause_genes.csv"
+s_phase: ./src/cell_cycle_s.txt
+g2m_phase: ./src/cell_cycle_g2m.txt
 
 # Data paths
 results: ./results/
