@@ -2,13 +2,15 @@
 Address reviewer comments and prepare rebuttal.
 """
 
+import os
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import scanpy as sc
 
 from scripts.configs import *
-from src.helpers import write_adata_label
+from src.helpers import adata_to_10x, write_adata_label
 
 
 def txt_to_list(txt_path):
@@ -42,7 +44,7 @@ sc.pp.neighbors(adata)
 sc.tl.umap(adata)
 adata.obs[["UMAP1", "UMAP2"]] = adata.obsm["X_umap"].copy()
 
-# Calculate cell cycle phase
+# Calculate cell cycle phase on lognorm transformed counts
 s_phase = txt_to_list(config["s_phase"])
 g2m_phase = txt_to_list(config["g2m_phase"])
 sc.tl.score_genes_cell_cycle(adata, s_genes=s_phase, g2m_genes=g2m_phase)
@@ -78,6 +80,20 @@ adata.obs["TMC"] = clusters["cluster"].astype(int).astype(str)
 umi_df = node_means(adata.obs, obs_key="total_umi")
 diapause_df = node_means(adata.obs, obs_key="diapause_score")
 
+# Bin diapause score and set categorical colour scheme for CELLXGENE
+bins = [-0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0, 0.1]
+adata.obs["diapause_binned"] = pd.cut(adata.obs["diapause_score"], bins)
+adata.uns["diapause_colors"] = [
+    "#f1eef6",
+    "#d0d1e6",
+    "#a6bddb",
+    "#74a9cf",
+    "#3690c0",
+    "#0570b0",
+    "#034e7b",
+    "#ef8a62",
+]
+
 # Save results to file
 results_dir = f"{config['results']}/rebuttal"
 Path(results_dir).mkdir(parents=True, exist_ok=True)
@@ -88,3 +104,5 @@ for key in ["phase", "name"]:
 obs.to_csv(f"{results_dir}/obs.csv")
 umi_df.to_csv(f"{results_dir}/annotate_umi.csv", index=False, header=True)
 diapause_df.to_csv(f"{results_dir}/annotate_diapause.csv", index=False, header=True)
+
+# Export Harmony PCA in MEX format for downstream use with TooManyCells

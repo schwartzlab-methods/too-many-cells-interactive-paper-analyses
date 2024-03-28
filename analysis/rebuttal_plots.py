@@ -15,6 +15,7 @@ from src import altair_themes
 alt.themes.register("publishTheme", altair_themes.publishTheme)
 alt.themes.enable("publishTheme")
 alt.data_transformers.disable_max_rows()
+alt.data_transformers.enable("vegafusion")
 
 
 def save_altair(plot, plot_id, results_dir, img_formats=["svg", "html", "png"]):
@@ -53,17 +54,14 @@ phase_cmap = {
     "domain": ["G1", "S", "G2M"],
     "range": [rgb2hex(c) for c in plt.get_cmap("Set1").colors][:3],
 }
-umi_cmap = {
-    "domain": [min(obs["total_umi"]), max(obs["total_umi"])],
-    "range": ["lightgrey", "red"],
-}
 
 # Plot umaps
 embeddings = ["UMAP", "Harmony UMAP"]
 base = alt.Chart(obs).mark_circle(size=2)
-max_umi = obs["total_umi"].max()
 for embedding in embeddings:
-    points = base.encode(alt.X(f"{embedding}1"), alt.Y(f"{embedding}2"))
+    points = base.encode(
+        alt.X(f"{embedding}1").title(None), alt.Y(f"{embedding}2").title(None)
+    )
     embedding_name = embedding.split(" ")[0].lower()
     sample = points.encode(
         alt.Color("name").title("Sample").scale(name_cmap).sort(name_cmap["domain"])
@@ -74,10 +72,7 @@ for embedding in embeddings:
         .scale(phase_cmap)
         .sort(phase_cmap["domain"])
     )
-    umi = points.encode(
-        alt.Color("total_umi").title("Total UMI counts").scale(umi_cmap)
-    )
-    umap = alt.vconcat(sample, phase, umi).configure_view(fill=None)
+    umap = alt.vconcat(sample, phase).configure_view(fill=None)
     save_altair(umap, embedding_name, results_dir)
 
 ### Reviewer 3
