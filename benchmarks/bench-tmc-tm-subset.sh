@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-# Benchmark TMC and TMI against tm-subset dataset
-
 result_file=_results-tmc-subset.csv
 tmc_container_name=tmc
 tmci_container_name=tmci_node
@@ -69,8 +67,8 @@ for i in {1..10}; do
     docker run -d -v `pwd`:`pwd` -w `pwd` \
         --user 1000 --name ${tmc_container_name} \
         gregoryschwartz/too-many-cells:3.0.1.0 make-tree \
-        --prior ./data/prior/tm-subset \
-        --labels-file ./data/prior/tm-subset/labels.csv \
+        --prior ./data/prior/subset \
+        --labels-file ./data/prior/subset/labels.csv \
         --dendrogram-output newtree.svg \
         --output ./data
 
@@ -88,9 +86,9 @@ for i in {1..10}; do
     docker run -d -v `pwd`:`pwd` -w `pwd` \
         --user 1000 --name ${tmc_container_name} \
         gregoryschwartz/too-many-cells:3.0.1.0 make-tree \
-        --prior ./data/prior/tm-subset/ \
+        --prior ./data/prior/subset/ \
         --min-size 1000 \
-        --labels-file ./data/prior/tm-subset/labels.csv \
+        --labels-file ./data/prior/subset/labels.csv \
         --dendrogram-output newtree.svg \
         --output ./data
 
@@ -119,7 +117,7 @@ for i in {1..10}; do
         --matrix-path ./data/tm-subset/Thymus-10X_P7_11 \
         --matrix-path ./data/tm-subset/Tongue-10X_P7_10 \
         --labels-file ./data/prior/tm-subset/labels.csv \
-        --prior ./data/prior/tm-subset \
+        --prior ./data/prior/subset \
         --dendrogram-output newtree.svg \
         --output ./data
 
@@ -140,8 +138,8 @@ for i in {1..10}; do
         run -d --entrypoint="" \
         --name ${tmci_container_name} \
         --no-deps \
-        -v "$(readlink -f ./data/prior/tm-subset/labels.csv):/tmp/labels.csv:ro" \
-        -v "$(readlink -f ./data/prior/tm-subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
+        -v "$(readlink -f ./data/prior/subset/labels.csv):/tmp/labels.csv:ro" \
+        -v "$(readlink -f ./data/prior/subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
         -v "$(readlink -f ./data/blank-config.json):/tmp/config.json:ro" \
         -v "$(readlink -f ./data):/tmp/results" \
         node node dist/exportTree.js \
@@ -166,8 +164,8 @@ for i in {1..10}; do
         run -d --entrypoint="" \
         --name ${tmci_container_name} \
         --no-deps \
-        -v "$(readlink -f ./data/prior/tm-subset/labels.csv):/tmp/labels.csv:ro" \
-        -v "$(readlink -f ./data/prior/tm-subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
+        -v "$(readlink -f ./data/prior/subset/labels.csv):/tmp/labels.csv:ro" \
+        -v "$(readlink -f ./data/prior/subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
         -v "$(readlink -f ./data/blank-config.json):/tmp/config.json:ro" \
         -v "$(readlink -f ./data):/tmp/results" \
         node node dist/exportTree.js \
@@ -205,8 +203,8 @@ for i in {1..10}; do
     docker-compose -f docker-compose.yaml \
         run -d --entrypoint="" \
         --name ${tmci_container_name} \
-        -v "$(readlink -f ./data/prior/tm-subset/labels.csv):/tmp/labels.csv:ro" \
-        -v "$(readlink -f ./data/prior/tm-subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
+        -v "$(readlink -f ./data/prior/subset/labels.csv):/tmp/labels.csv:ro" \
+        -v "$(readlink -f ./data/prior/subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
         -v "$(readlink -f ./data/blank-config.json):/tmp/config.json:ro" \
         -v "$(readlink -f ./data):/tmp/results" \
         node node dist/exportTree.js \
@@ -251,8 +249,8 @@ for i in {1..10}; do
     docker-compose -f docker-compose.yaml \
         run -d --entrypoint="" \
         --name ${tmci_container_name} \
-        -v "$(readlink -f ./data/prior/tm-subset/labels.csv):/tmp/labels.csv:ro" \
-        -v "$(readlink -f ./data/prior/tm-subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
+        -v "$(readlink -f ./data/prior/subset/labels.csv):/tmp/labels.csv:ro" \
+        -v "$(readlink -f ./data/prior/subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
         -v "$(readlink -f ./data/feature-config.json):/tmp/config.json:ro" \
         -v "$(readlink -f ./data):/tmp/results" \
         node node dist/exportTree.js \
@@ -338,8 +336,8 @@ for i in {1..10}; do
         docker-compose -f docker-compose.yaml \
             run -d --entrypoint="" \
             --name ${tmci_container_name} \
-            -v "$(readlink -f ./data/prior/tm-subset/labels.csv):/tmp/labels.csv:ro" \
-            -v "$(readlink -f ./data/prior/tm-subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
+            -v "$(readlink -f ./data/prior/subset/labels.csv):/tmp/labels.csv:ro" \
+            -v "$(readlink -f ./data/prior/subset/cluster_tree.json):/tmp/cluster_tree.json:ro" \
             -v "$(readlink -f ./data/feature-config-t.json):/tmp/config.json:ro" \
             -v "$(readlink -f ./data):/tmp/results" \
             node node dist/exportTree.js \

@@ -2,8 +2,6 @@
 
 set -euo pipefail
 
-# Benchmark TMC and TMI against cl dataset
-
 result_file=_results_cl.csv
 tmc_container_name=tmc
 tmci_container_name=tmci_node
@@ -22,6 +20,8 @@ get_max_mem () {
     while [[ -n $(docker ps -q --filter name="${1}") ]]; do
 
         container_id=$(docker ps --no-trunc -q --filter name="${1}")
+
+        sleep .1
 
         if [[ -f "$cgroup_mem_root"/"$container_id"/memory.max_usage_in_bytes ]]; then
             mem=$(cat "$cgroup_mem_root"/"$container_id"/memory.max_usage_in_bytes)
@@ -53,6 +53,8 @@ get_max_mem_dual () {
         if [[ $total_mem -gt $max_mem ]]; then
             max_mem=$total_mem
         fi
+
+        sleep .1
 
     done
 

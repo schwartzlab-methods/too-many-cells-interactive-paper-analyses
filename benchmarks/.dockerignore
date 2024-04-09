@@ -1,2 +1,6 @@
 data/*
 *.h5ad
+*.csv
+*.gz
+*.zip
+matrix-10x
