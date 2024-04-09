@@ -86,6 +86,11 @@ def signature_score(
         return gene_signature_score
 
 
+def txt_to_list(txt_path):
+    with open(txt_path, "r") as f:
+        return f.read().splitlines()
+
+
 # GSEA functions
 def preranked(log2fc: pd.DataFrame, gene_dict: Dict, min_size: int = 5) -> gp.GSEA:
     pre_res = gp.prerank(
@@ -190,21 +195,18 @@ def rank_product(foldchange: pd.DataFrame, n_permutations: int = 100):
     return rank
 
 
-# Write functions
-def adata_to_10x(adata, layer, data_dir):
-    Path(data_dir).mkdir(parents=True, exist_ok=True)
+# IO functions
+def adata_to_10x(adata, key, mex_path, attr='layers'):
+    Path(mex_path).mkdir(parents=True, exist_ok=True)
     # Transpose read counts to matrix market format, such that (rows, columns)
     # correspond to (features, cells)
-    with os.path.join(data_dir, "matrix.mtx") as mtx_path:
-        mmwrite(mtx_path, adata.layers[layer].T, symmetry="general")
-        with open(mtx_path, "rb") as mtx_in:
-            with gzip.open(f"{mtx_path}.gz", "wb") as mtx_gz:
-                shutil.copyfileobj(mtx_in, mtx_gz)
+    with gzip.open(os.path.join(mex_path, "matrix.mtx.gz"), "wb") as mtx:
+        mmwrite(mtx, getattr(adata)[key].T, symmetry="symmetric")
     # Barcode observations
-    barcodes_path = os.path.join(data_dir, "barcodes.tsv.gz")
+    barcodes_path = os.path.join(mex_path, "barcodes.tsv.gz")
     adata.obs.index.to_csv(barcodes_path, sep="\t", header=False)
     # Gene features
-    features_path = os.path.join(data_dir, "features.tsv.gz")
+    features_path = os.path.join(mex_path, "features.tsv.gz")
     var_df = pd.DataFrame(
         {
             "gene_id": adata.var.reset_index()["index"],
@@ -222,3 +224,21 @@ def write_adata_label(adata, obs_key, data_dir):
     labels_df = adata_obs[["index", obs_key]]
     labels_df.columns = ["item", "label"]
     labels_df.to_csv(labels_target, header=True, index=False)
+
+
+# Plotting functions
+def node_means(obs, obs_key, node_info, cluster_key="TMC"):
+    subtree_dict = dict(zip(node_info["node"], node_info["subtree"].str.split("/")))
+    vals = {}
+    for node_id, subtree in subtree_dict.items():
+        vals[node_id] = obs[obs_key][obs[cluster_key].isin(subtree)].mean()
+    vals_df = pd.DataFrame().from_dict(vals, orient="index")
+    vals_df = vals_df.reset_index().rename(columns={"index": "node_id", 0: obs_key})
+    return vals_df
+
+
+def save_altair(plot, plot_id, results_dir, img_formats=["svg", "html", "png"]):
+    Path(results_dir).mkdir(parents=True, exist_ok=True)
+    for img_format in img_formats:
+        plot_path = f"{results_dir}/{plot_id}.{img_format}"
+        plot.save(plot_path)
