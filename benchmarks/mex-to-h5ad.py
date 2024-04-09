@@ -9,6 +9,12 @@ def prepare(mtx_dir_path: str, outpath: str):
 
     con = None
 
+    try:
+        # we might have nested directories, or just one set of files in root
+        con = read_10x_mtx(mtx_dir_path)
+    except Exception:
+        pass
+
     for root, dirs, files in os.walk(mtx_dir_path):
         for dir in dirs:
             adat = read_10x_mtx(os.path.join(root, dir))

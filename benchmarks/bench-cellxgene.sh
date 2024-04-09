@@ -6,7 +6,6 @@ set -euo pipefail
 # Both processes begin with a MEX matrix directory and end with a running webapp w/ visualizations and gene expression overlay
 # NOTE: the input for tmci includes cluster_tree.json and labels.csv, which have been generated for the test matrix prior to running this program.
 # NOTE: manually update variables below to change dataset or run type
-# NOTE: should be run in container w/ image tagged `cellxgene-runner` built w/ Dockerfile.cellxgene
 
 start_time=$(date +"%T.%N")
 cgroup_mem_root=$(grep cgroup /proc/mounts | grep memory | awk '{print $2}')/docker
@@ -19,7 +18,7 @@ run_type=cellxgene
 
 cellxgene_container_name=cellxgene-runner
 
-dataset=full
+dataset=ts
 
 tmci_webserver_container_name=tmci_node_server
 
@@ -78,6 +77,7 @@ get_max_mem_dual () {
 
 if [[ $run_type == 'tmci' ]]; then
 
+    mem="0"
     max_mem="0"
 
     # for tmci, we are just benchmarking the run-time of the start-and-load script with the matrix and pre-generated labels and tree.
@@ -94,8 +94,8 @@ if [[ $run_type == 'tmci' ]]; then
 
 
     docker-compose -f docker-compose.yaml run -d --name ${tmci_webserver_container_name} --rm  \
-    -v "$(readlink -f ./data/prior/tm-full/cluster_tree.json):/usr/app/static/files/cluster_tree.json:ro" \
-    -v "$(readlink -f ./data/prior/tm-full/labels.csv):/usr/app/static/files/labels.csv:ro" \
+    -v "$(readlink -f ./data/prior/full/cluster_tree.json):/usr/app/static/files/cluster_tree.json:ro" \
+    -v "$(readlink -f ./data/prior/full/labels.csv):/usr/app/static/files/labels.csv:ro" \
     node --prod
 
     # we'll kill this container manually
@@ -115,7 +115,7 @@ if [[ $run_type == 'tmci' ]]; then
     docker rm ${tmci_webserver_container_name}
 
 else
-    docker run -d -i --name ${cellxgene_container_name} --rm --log-driver=journald -v "${PWD}"/data/tm-full:/code/matrices -p 5004:5004 cellxgene-runner:latest
+    docker run -d -i --name ${cellxgene_container_name} --rm --log-driver=journald -v "${PWD}"/matrix-10x:/code/matrices -p 5004:5004 cellxgene-runner:latest
 
     #we'll kill this container manually
     max_mem=$(get_max_mem ${cellxgene_container_name})

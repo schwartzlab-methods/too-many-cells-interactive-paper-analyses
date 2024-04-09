@@ -1,8 +1,5 @@
 #! /usr/bin/env bash
 
-# Script for benchmarking performance of cirrocumulus again test dataset.
-# NOTE: prerequeisite is image tagged `cirro-runner` built from Dockerfile.cirrocumulus
-
 set -euo pipefail
 
 start_time=$(date +"%T.%N")
@@ -34,7 +31,7 @@ get_max_mem () {
     echo $mem
 }
 
-docker run --rm -i -d -p 5004:5004 --name ${container_name} --log-driver=journald -v $PWD/data/tm-full:/code/matrices:ro cirro-runner
+docker run --rm -i -d -p 5004:5004 --name ${container_name} --log-driver=journald -v $PWD/matrix-10x:/code/matrices:ro cirro-runner
 
 # we'll kill this container manually
 max_mem=$(get_max_mem ${container_name})

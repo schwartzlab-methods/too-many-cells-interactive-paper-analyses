@@ -1,0 +1,14 @@
+{
+    "features": [
+        "Cd4"
+    ],
+    "scales": {
+        "colorScale": {
+            "featureGradientRange": [
+                "#D3D3D3",
+                "#ff0000"
+            ],
+            "variant": "featureAverage"
+        }
+    }
+}
