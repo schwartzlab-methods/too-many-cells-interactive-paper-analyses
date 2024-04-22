@@ -196,7 +196,7 @@ def rank_product(foldchange: pd.DataFrame, n_permutations: int = 100):
 
 
 # IO functions
-def adata_to_10x(adata, key, mex_path, attr='layers'):
+def adata_to_10x(adata, key, mex_path, attr="layers"):
     Path(mex_path).mkdir(parents=True, exist_ok=True)
     # Transpose read counts to matrix market format, such that (rows, columns)
     # correspond to (features, cells)
@@ -235,6 +235,12 @@ def node_means(obs, obs_key, node_info, cluster_key="TMC"):
     vals_df = pd.DataFrame().from_dict(vals, orient="index")
     vals_df = vals_df.reset_index().rename(columns={"index": "node_id", 0: obs_key})
     return vals_df
+
+
+def node_idx(obs, node, node_info, cluster_key="TMC"):
+    subtree_dict = dict(zip(node_info["node"], node_info["subtree"].str.split("/")))
+    idx = obs[cluster_key].isin(subtree_dict[node])
+    return idx
 
 
 def save_altair(plot, plot_id, results_dir, img_formats=["svg", "html", "png"]):
