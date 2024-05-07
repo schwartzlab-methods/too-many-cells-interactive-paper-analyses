@@ -1,0 +1,61 @@
+# URLs to single-cell data
+data:
+  v3:
+    LNCaP control:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155455/suppl/GSM5155455_LNCaP-DMSO_barcodes.tsv.gz 
+      features: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155455/suppl/GSM5155455_LNCaP-DMSO_features.tsv.gz 
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155455/suppl/GSM5155455_LNCaP-DMSO_matrix.mtx.gz
+    LNCaP treated:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155457/suppl/GSM5155457_LNCaP-RESA_barcodes.tsv.gz
+      features: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155457/suppl/GSM5155457_LNCaP-RESA_features.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM5155nnn/GSM5155457/suppl/GSM5155457_LNCaP-RESA_matrix.mtx.gz
+    MDA-MB-231 control:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684556/suppl/GSM4684556_t0_barcodes.tsv.gz
+      features: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684556/suppl/GSM4684556_t0_features.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684556/suppl/GSM4684556_t0_matrix.mtx.gz
+    MDA-MB-231 treated:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684557/suppl/GSM4684557_t7_barcodes.tsv.gz
+      features: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684557/suppl/GSM4684557_t7_features.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4684nnn/GSM4684557/suppl/GSM4684557_t7_matrix.mtx.gz
+  v2:
+    DND-41 control:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121361/suppl/GSM4121361_DND41_DMSO_scRNA_barcodes.tsv.gz
+      genes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121361/suppl/GSM4121361_DND41_DMSO_scRNA_genes.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121361/suppl/GSM4121361_DND41_DMSO_scRNA_matrix.mtx.gz
+    DND-41 treated short:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121362/suppl/GSM4121362_DND41_GSI_scRNA_barcodes.tsv.gz
+      genes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121362/suppl/GSM4121362_DND41_GSI_scRNA_genes.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121362/suppl/GSM4121362_DND41_GSI_scRNA_matrix.mtx.gz
+    DND-41 treated long:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121364/suppl/GSM4121364_DND41_GSI_Res_sustained_barcodes.tsv.gz
+      genes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121364/suppl/GSM4121364_DND41_GSI_Res_sustained_genes.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4121nnn/GSM4121364/suppl/GSM4121364_DND41_GSI_Res_sustained_matrix.mtx.gz
+    SK-MEL-28 control:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932163/suppl/GSM4932163_sample5_barcodes.tsv.gz
+      genes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932163/suppl/GSM4932163_sample5_genes.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932163/suppl/GSM4932163_sample5_matrix.mtx.gz
+    SK-MEL-28 treated:
+      barcodes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932166/suppl/GSM4932166_sample8_barcodes.tsv.gz
+      genes: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932166/suppl/GSM4932166_sample8_genes.tsv.gz
+      matrix: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM4932nnn/GSM4932166/suppl/GSM4932166_sample8_matrix.mtx.gz
+  tar:
+    PC9 control:
+      url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3972nnn/GSM3972651/suppl/GSM3972651_PC9D0_filtered_feature_bc_matrices.tar.gz
+    PC9 treated:
+      url: https://ftp.ncbi.nlm.nih.gov/geo/samples/GSM3972nnn/GSM3972652/suppl/GSM3972652_PC9D3Erl_filtered_feature_bc_matrices.tar.gz
+
+# Paths to local data files
+raw_adata: "./data2/adata.h5ad"
+raw_mex: "./data2/mtx_raw"
+tfidf_mex: "./data2/mtx_tfidf"
+uq_mex: "./data2/mtx_upperquartile"
+whitelist: "./src/whitelist_dnd41.csv"
+
+# Results folders
+download: "./results/download"
+preprocess: "./results/preprocess"
+toomanycells: "./results/toomanycells"
+interactive: "./results/interactive"
+differential: "./results/differential"
+gsea: "./results/gsea"
+plots: "./results/plots"

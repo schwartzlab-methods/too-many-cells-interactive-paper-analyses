@@ -5,6 +5,9 @@
 # Python environment files
 .venv/
 
+# VSCode settings
+.vscode/
+
 # Cache files
 *.DS_Store
 __pycache__/

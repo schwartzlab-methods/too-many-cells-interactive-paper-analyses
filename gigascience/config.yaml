@@ -1,0 +1,29 @@
+#Comment: GigaScience analysis configuration file
+#Describes paths to input data, prior results, and output directories
+---
+# Data sets and directories
+raw_adata: "results/download/adata.h5ad"
+tmc_clusters: "results/02_pruned_tree/clusters.csv"
+tmc_node_info: "results/02_pruned_tree/node_info.csv"
+uq_mex: "data/mtx_upperquartile"
+tfidf_mex: "data/mtx_tfidf"
+qnorm_mex: "data/mtx_quantilenorm"
+
+# Results directories
+cellxgene: "results/gigascience/cellxgene"
+harmony: "results/gigascience/harmony"
+regress: "results/gigascience/regress"
+gsea: "results/gigascience/gsea"
+toomanycells: "results/gigascience/toomanycells"
+plots: "results/gigascience/plots"
+
+# Data set labels
+name: "results/gigascience/cellxgene/labels_name.csv"
+diapause: "results/gigascience/cellxgene/labels_diapause_score.csv"
+
+# Gene lists
+s_phase: "src/gene_sets/cell_cycle_s.txt"
+g2m_phase: "src/gene_sets/cell_cycle_g2m.txt"
+diapause_up: "src/gene_sets/diapause_up.txt"
+diapause_down: "src/gene_sets/diapause_down.txt"
+msigdb: "src/gene_sets/msigdb"

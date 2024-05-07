@@ -2,7 +2,7 @@
 # (initally) By
 # Gregory W. Schwartz
 
-'''
+"""
 Use:
 
 sys.path.append("/path/to/parent/directory/of/altairThemes.py")
@@ -15,13 +15,14 @@ alt.themes.register("publishTheme", altairThemes.publishTheme)
 
 # enable the newly registered theme
 alt.themes.enable("publishTheme")
-'''
+"""
 
-from matplotlib.colors import LinearSegmentedColormap, to_hex, rgb2hex
 from typing import List
+
 import altair as alt
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.colors import LinearSegmentedColormap, rgb2hex, to_hex
 
 
 def publishTheme():
@@ -41,14 +42,12 @@ def publishTheme():
             "view": {
                 "strokeOpacity": 0,  # Despine
                 "strokeWidth": 0.756,
+                "height": 100,
+                "width": 100,
             },
             "style": {
-                "guide-title": {
-                    "fontSize": fontSize
-                },
-                "guide-label": {
-                    "fontSize": fontSize
-                }
+                "guide-title": {"fontSize": fontSize},
+                "guide-label": {"fontSize": fontSize},
             },
             "title": {
                 "fontSize": fontSize,
@@ -57,7 +56,10 @@ def publishTheme():
                 "fontWeight": "normal",
             },
             "legend": {
-                "titleFontWeight": "normal"
+                "font": font,
+                "labelFont": labelFont,
+                "titleFont": font,
+                "titleFontWeight": "normal",
             },
             "axis": {
                 "domainColor": "#000000",
@@ -75,7 +77,7 @@ def publishTheme():
             },
             "header": {
                 "titleFontWeight": "normal",
-            }
+            },
             # For individual axis
             # "axisX": {
             #     "grid": False,
@@ -90,6 +92,7 @@ def publishTheme():
             # },
         }
     }
+
 
 def publishThemeStandardSize():
     """The publish theme but with a standard height for single plots."""
